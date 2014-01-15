@@ -25,7 +25,7 @@ d.pre_train(img,5,50)
 for i in xrange(0, 100):
   d.train_labels(img, lbl, 50, 50)
   tst_class = d.classify(tst_img,10)
-  print 'Error over test data: {0}'.format(1 - (tst_class*tst_lbl).mean() * 10)
+  print 'Error over test data: {0}'.format(1 - (tst_class*tst_lbl).mean() * dbn.number_labels)
 
 
 # Tests the DBN on test images
