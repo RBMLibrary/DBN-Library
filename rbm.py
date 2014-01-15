@@ -19,6 +19,9 @@ class RBM:
   # data % batch_size elements are
   def train(self, data, epochs, batch_size):
     data = self.__prepare_data(data)
+    vb = data.mean(axis = 0)
+    vb = 1 / (1 - vb)
+    self.visible_bias = np.log(vb)
     assert len(data.shape) == 2 # Data should come as an array of arrays
 
     (num_examples, data_size) = data.shape
@@ -65,8 +68,6 @@ class RBM:
 
 
   def run_batch(self, v_prob1):
-    # Compute the hidden states activated by our input
-    #h_state1 = self.regenerate_hidden(v_state1)
     h_act1 = np.dot(v_prob1, self.weights) + self.hidden_bias
     h_prob1 = self.__logistic(h_act1)
     h_state1 = ( h_prob1 > np.random.random(h_prob1.shape) ).astype(np.int)
@@ -78,11 +79,6 @@ class RBM:
     h_act2 = np.dot(v_prob2, self.weights) + self.hidden_bias
     h_prob2 = self.__logistic(h_act2)
 
-    # Compute the network's regeneration of the input
-    #v_state2 = self.regenerate_visible(h_state1)
-    #Compute the hidden neurons triggered by the regenerated input
-    #h_state2 = self.regenerate_hidden(v_state2)
-
     neg_ass = self.__compute_associations(v_prob2, h_prob2)
 
     batch_size = v_prob1.shape[0]
@@ -92,7 +88,6 @@ class RBM:
 
     vbias_gradient = (v_prob1 - v_prob2).mean(axis=0) * self.learning_rate
     hbias_gradient = (h_prob1 - h_prob2).mean(axis=0) * self.learning_rate
-    #hbias_gradient = 0.01 - (h_state1).mean(axis=0)
 
     return weight_gradient,vbias_gradient, hbias_gradient, error
 
@@ -135,4 +130,3 @@ class RBM:
 
   def __logistic(self, x):
     return 1/(1 + np.exp(-x))
-
