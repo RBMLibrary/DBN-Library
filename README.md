@@ -19,6 +19,8 @@ example.py
 -----------
 An example of how to use the DBN. Creating a training set. Bulding a DBN. Pre-training, fine tuning and then outputting the error message. 
 
-
+tasks.py
+-----------
+A simplified version of the processing task we use to train our DBNs. Note that this is just for reference and will not run. You need to create a function that retrieves images from a directory.
 
 
