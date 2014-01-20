@@ -3,7 +3,6 @@ from rbm import RBM
 
 class DBN:
   def __init__(self, config, number_labels, learning_rate = 0.1):
-    print config
     self._rbms = []
     self.learning_rate = learning_rate
     self.number_labels = number_labels
