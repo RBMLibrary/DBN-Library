@@ -2,21 +2,21 @@ import numpy as np
 from rbm import RBM
 
 class DBN:
-  def __init__(self, config, number_labels, learning_rate = 0.1):
+  def __init__(self, topology_layer_sizes, number_labels, learning_rate = 0.1):
     self._rbms = []
     self.learning_rate = learning_rate
     self.number_labels = number_labels
-    self.number_inputs = config[0]
-    self.number_layers = len(config)-1
+    self.number_inputs = topology_layer_sizes[0]
+    self.number_layers = len(topology_layer_sizes)-1
 
     for i in xrange(0, self.number_layers):
-      self._rbms.append(RBM(config[i], config[i+1], learning_rate))
+      self._rbms.append(RBM(topology_layer_sizes[i], topology_layer_sizes[i+1], learning_rate))
 
     self._label_weights = \
-      np.random.normal(0,0.01,(config[self.number_layers], self.number_labels))
+      np.random.normal(0,0.01,(topology_layer_sizes[self.number_layers], self.number_labels))
 
   # Performs unsupervised training on the network
-  # Each RBM learns the configuration of the hidden layer below it
+  # Each RBM learns the topology_layer_sizesuration of the hidden layer below it
   def pre_train(self, data, epochs = 5, batch_size = 250):
     samples = data
     for cur in xrange(0,self.number_layers):
