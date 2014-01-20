@@ -17,6 +17,10 @@ class TestDBN(unittest.TestCase):
         d = DBN(layer_sizes, 0, 0)
         self.assertEquals(d.number_inputs, 144)
 
+    def test_rbms_list_setup_correct(self):
+        layer_sizes = [144, 50, 50, 2000]
+        d = DBN(layer_sizes, 0, 0)
+        self.assertEquals(len(d._rbms), d.number_layers)
 
 
 
