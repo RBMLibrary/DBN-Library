@@ -89,19 +89,3 @@ class TestDBN(unittest.TestCase):
         labels = []
         with self.assertRaises(ValueError):
             d.train_labels(data, labels, 1, 1)
-
-    # RBM tests
-    def test_negative_hidden_constructor(self):
-        with self.assertRaises(ValueError):
-            r = RBM(10, -10)
-
-    def test_negative_visible_constructor(self):
-        with self.assertRaises(ValueError):
-            r = RBM(-10, 10)
-
-    # General tests
-    def test_logistic_zero(self):
-        r = RBM(10, 10)
-        self.assertEquals(r._RBM__logistic(0), 0.5)
-
-
