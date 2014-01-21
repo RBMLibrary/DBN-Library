@@ -27,7 +27,7 @@ class DBN:
 
   # Performs one step of backpropagation on the very top level in order to learn the label weights
   # Uses the steepest-descent method of learning
-  def train_labels(self, inputs, target_labels,epochs = 50, batch_size = 250):
+  def train_labels(self, inputs, target_labels, epochs = 50, batch_size = 250):
     data = np.array(zip(inputs, target_labels))
     (num_examples, data_size) = data.shape
     batches = num_examples / batch_size

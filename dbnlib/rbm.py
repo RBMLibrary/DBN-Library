@@ -19,10 +19,13 @@ class RBM:
   # data % batch_size elements are
   def train(self, data, epochs, batch_size):
     data = self.__prepare_data(data)
-    
+
     vb = data.mean(axis = 0)
-    if (vb == 1):
-        vb = 0.999999
+
+    for i, v in enumerate(vb):
+      if (v == 1):
+        vb[i] = 0.99999
+
     vb = 1 / (1 - vb)
 
     self.visible_bias = np.log(vb)
