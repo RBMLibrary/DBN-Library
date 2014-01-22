@@ -3,7 +3,10 @@ import copy
 import array
 import numpy as np
 
+# Extracts the data from the MNIST database files
 class MNIST:
+
+  # Loads the labels
   @staticmethod
   def load_labels(file_path):
     data = IDX.load(file_path)
@@ -18,6 +21,7 @@ class MNIST:
     labels = map(class_vector_dict.get, data)
     return np.array(labels)
 
+  # Loads the images
   @staticmethod
   def load_images(file_path):
     data = IDX.load(file_path)
@@ -33,33 +37,38 @@ class MNIST:
     data = data >= 0.5
     return data.astype(np.int)
 
+# Extracts the data from the IDX file format
 class IDX:
+
+  # Loads data from an IDX file
   @classmethod
   def load(cls, file_path):
     f = open(file_path)
     (magic, data_code, dimensions) = struct.unpack('hBB', f.read(4))
-    assert magic == 0 #The first two bytes are 0 
+    assert magic == 0 #The first two bytes are 0
 
     data_format = cls.get_data_format(data_code)
     data_format_size = struct.calcsize(data_format)
     dimension_sizes = array.array('I',f.read(dimensions * 4))
     dimension_sizes.byteswap() # The IDX format is big endian, python is little endian
 
+    # Reads the dimension from the file
     def read_dimension(dimension):
       if dimension == (dimensions - 1): # dimension is 0-indexed, dimensions 1-indexed
         last_dim_bytes = dimension_sizes[dimension] * data_format_size
         result = array.array(data_format, f.read(last_dim_bytes))
         result.byteswap()
         return result
-      
+
       result = []
       for x in xrange(0, dimension_sizes[dimension]):
         result.append(read_dimension(dimension+1))
-      
+
       return result
 
     return read_dimension(0)
-    
+
+  # Gets the format of the Data
   @staticmethod
   def get_data_format(code):
     code_dict = {0x08 : 'B',
@@ -68,6 +77,6 @@ class IDX:
                  0x0C : 'I',
                  0x0D : 'f',
                  0x0E : 'd'}
-    
+
     assert code in code_dict # We assume the code is known
     return code_dict[code]

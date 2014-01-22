@@ -2,6 +2,8 @@ from data import MNIST
 from dbn import DBN
 import numpy as np
 
+# An example of how to use the library
+
 # Creates a DBN
 d = DBN([28*28, 500,500, 2000], 10, 0.1)
 
@@ -12,6 +14,11 @@ labels = MNIST.load_labels('labels')
 # Gets the training set of images
 img = images[0:60000]
 lbl = labels[0:60000]
+
+# Permutes the data to ensure random batches
+train_tuples  = zip(img, lbl)
+train_tuples = np.random.permutation(train_tuples)
+(img, lbl) = zip(*train_tuples)
 
 # Loads the test images from the MNIST database
 tst_img = MNIST.load_images('test_images')
